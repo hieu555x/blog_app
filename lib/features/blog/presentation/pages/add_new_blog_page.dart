@@ -23,11 +23,9 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
 
   void selectImage() async {
     final pickedImage = await pickImage();
-    pickedImage != null
-        ? setState(() {
-            image = pickedImage;
-          })
-        : null;
+    setState(() {
+      image = pickedImage;
+    });
   }
 
   @override
