@@ -482,7 +482,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📞 Contact
 
-- **Developer**: Hieu555x
+- **Developer**: Spader
 - **Email**: hieu555x@gmail.com
 - **GitHub**: [@hieu555x](https://github.com/hieu555x)
 - **LinkedIn**: [Hieu555x](https://linkedin.com/in/hieu555x)
