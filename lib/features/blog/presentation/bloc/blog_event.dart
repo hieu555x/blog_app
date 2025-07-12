@@ -20,3 +20,11 @@ final class BlogUpload extends BlogEvent {
 }
 
 final class BlogFetchAllBlogs extends BlogEvent {}
+
+final class BlogDelete extends BlogEvent {
+  final String blogId;
+
+  BlogDelete({
+    required this.blogId,
+  });
+}

@@ -1,6 +1,8 @@
 import 'package:blog_app/core/common/widgets/loader.dart';
 import 'package:blog_app/core/theme/app_pallete.dart';
 import 'package:blog_app/core/utils/show_snackbar.dart';
+import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:blog_app/features/auth/presentation/pages/login_page.dart';
 import 'package:blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:blog_app/features/blog/presentation/pages/add_new_blog_page.dart';
 import 'package:blog_app/features/blog/presentation/widgets/blog_card.dart';
@@ -29,7 +31,35 @@ class _BlogPageState extends State<BlogPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Blog App'),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            // Proper logout logic
+            context.read<AuthBloc>().add(AuthLogout());
+            Navigator.pushAndRemoveUntil(
+              context,
+              LoginPage.route(),
+              (route) => false,
+            );
+          },
+          icon: Transform.flip(
+            flipX: true,
+            child: const Icon(Icons.logout),
+          ),
+        ),
+        title: BlocConsumer<BlogBloc, BlogState>(
+          listener: (context, state) {},
+          builder: (context, state) {
+            return state is BlogsDisplaySuccess && state.blogs.isNotEmpty
+                ? Text(
+                    'Welcome back, ${state.blogs[0].posterName}',
+                    style: TextStyle(
+                      fontSize: AppPalette.titleSize,
+                    ),
+                  )
+                : const Text('Blog App');
+          },
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -44,7 +74,9 @@ class _BlogPageState extends State<BlogPage> {
       ),
       body: BlocConsumer<BlogBloc, BlogState>(
         listener: (context, state) {
-          if (state is BlogFailure) showSnackBar(context, state.error);
+          if (state is BlogFailure) {
+            showSnackBar(context, state.error);
+          }
         },
         builder: (context, state) {
           return state is BlogLoading

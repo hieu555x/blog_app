@@ -1,7 +1,10 @@
 import 'dart:io';
 
+import 'package:blog_app/core/constants/constants.dart';
 import 'package:blog_app/core/error/exception.dart';
 import 'package:blog_app/core/error/failure.dart';
+import 'package:blog_app/core/network/connect_checker.dart';
+import 'package:blog_app/features/blog/data/datasource/blog_local_datasource.dart';
 import 'package:blog_app/features/blog/data/datasource/blog_remote_data_source.dart';
 import 'package:blog_app/features/blog/data/models/blog_models.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
@@ -11,7 +14,13 @@ import 'package:uuid/uuid.dart';
 
 class BlogRepositoriesImpl implements BlogRepository {
   final BlogRemoteDataSource blogRemoteDataSource;
-  BlogRepositoriesImpl(this.blogRemoteDataSource);
+  final BlogLocalDatasource blogLocalDatasource;
+  final ConnectChecker connectChecker;
+  BlogRepositoriesImpl(
+    this.blogRemoteDataSource,
+    this.blogLocalDatasource,
+    this.connectChecker,
+  );
 
   @override
   Future<Either<Failure, Blog>> uploadBlog({
@@ -22,6 +31,9 @@ class BlogRepositoriesImpl implements BlogRepository {
     required List<String> topics,
   }) async {
     try {
+      if (!await (connectChecker.isConnected)) {
+        return left(Failure(Constants.noConnectionErrorMessage));
+      }
       BlogModels blogModels = BlogModels(
         id: const Uuid().v1(),
         posterId: posterId,
@@ -50,9 +62,35 @@ class BlogRepositoriesImpl implements BlogRepository {
   @override
   Future<Either<Failure, List<Blog>>> getAllBlog() async {
     try {
+      if (!await (connectChecker.isConnected)) {
+        final blogs = blogLocalDatasource.loadBlog();
+        return right(blogs);
+      }
       final blogs = await blogRemoteDataSource.getAllBlogs();
+      blogLocalDatasource.uploadLocalBlogs(blog: blogs);
 
       return right(blogs);
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteBlog({
+    required String blogId,
+  }) async {
+    try {
+      if (!await (connectChecker.isConnected)) {
+        return left(Failure(Constants.noConnectionErrorMessage));
+      }
+
+      // Xóa blog từ server
+      await blogRemoteDataSource.deleteBlog(blogId);
+
+      // Xóa blog từ local storage
+      blogLocalDatasource.deleteBlogLocal(blogId);
+
+      return right(null);
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }
