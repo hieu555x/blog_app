@@ -10,4 +10,6 @@ class AppPalette {
   static Color greyColor = Colors.grey;
   static Color errorColor = Colors.redAccent;
   static Color transparentColor = Colors.transparent;
+  static double titleSize = 24;
+  static double posterNameSize = 16;
 }
