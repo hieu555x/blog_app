@@ -14,7 +14,8 @@
 - [📦 Installation](#-installation)
 - [⚙️ Configuration](#️-configuration)
 - [🚀 Running the App](#-running-the-app)
-- [📂 Project Structure](#-project-structure)
+- [� Deployment & CI/CD](#-deployment--cicd)
+- [�📂 Project Structure](#-project-structure)
 - [🔧 API Reference](#-api-reference)
 - [🤝 Contributing](#-contributing)
 
@@ -383,20 +384,49 @@ flutter test --coverage
 flutter test test/auth_test.dart
 ```
 
-## 🚀 Deployment
+## 🚀 Deployment & CI/CD
 
-### **Android (Google Play Store)**
+### **Automated CI/CD with GitHub Actions**
 
+The project includes automated build and release workflows:
+
+#### **Automatic Releases**
+- **Push to `main`**: Creates development build with auto-increment version
+- **Create tag** (e.g., `v1.0.0`): Creates official release with APK + AAB files
+- **Pull requests**: Runs code quality checks and tests
+
+#### **Manual Release**
+1. Go to **GitHub Actions** tab
+2. Select "**Release Management**" workflow  
+3. Click "**Run workflow**"
+4. Enter version (e.g., `v1.0.1`) and release notes
+5. APK and AAB files auto-generated and published
+
+#### **Download APK**
+- Visit **Releases** page on GitHub
+- Download latest APK file
+- Install directly on Android device
+
+### **Manual Deployment**
+
+#### **Android (Google Play Store)**
 1. Build AAB: `flutter build appbundle --release`
 2. Upload to Google Play Console
 3. Follow Play Store review process
 
-### **iOS (App Store)**
-
+#### **iOS (App Store)**
 1. Build iOS: `flutter build ios --release`
 2. Archive in Xcode
 3. Upload to App Store Connect
 4. Follow App Store review process
+
+### **CI/CD Features**
+- ✅ **Automated APK building** on every push
+- ✅ **Code quality checks** and testing
+- ✅ **Security scanning** and analysis
+- ✅ **Artifact storage** (30 days retention)
+- ✅ **Professional release notes** generation
+- ✅ **Version auto-increment** system
 
 ## 🔒 Security
 
