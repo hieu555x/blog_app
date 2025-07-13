@@ -5,6 +5,7 @@ This directory contains automated workflows for the Blog App project.
 ## 🚀 Available Workflows
 
 ### 1. **build-apk.yml** - Main Build Pipeline
+
 - **Triggers**: Push to `main`/`develop`, tags, pull requests
 - **Features**:
   - Automatic APK building
@@ -14,6 +15,7 @@ This directory contains automated workflows for the Blog App project.
   - Development releases for main branch pushes
 
 ### 2. **manual-release.yml** - Manual Release Creation
+
 - **Triggers**: Manual workflow dispatch
 - **Features**:
   - Create tagged releases with custom version
@@ -22,6 +24,7 @@ This directory contains automated workflows for the Blog App project.
   - Professional release documentation
 
 ### 3. **code-quality.yml** - Code Quality Checks
+
 - **Triggers**: Push and pull requests
 - **Features**:
   - Code formatting verification
@@ -34,9 +37,11 @@ This directory contains automated workflows for the Blog App project.
 ### Automatic Releases (Recommended)
 
 1. **Development Builds**: Push to `main` branch
+
    ```bash
    git push origin main
    ```
+
    - Creates development release with tag `dev-{build_number}`
    - Marked as pre-release
    - APK available immediately
@@ -61,11 +66,13 @@ This directory contains automated workflows for the Blog App project.
 ## 🔧 Configuration
 
 ### Required Setup
+
 - No additional secrets needed (uses GITHUB_TOKEN automatically)
 - Workflows will create placeholder `app_secrets.dart` for building
 - Real secrets should be configured in your local environment
 
 ### Customization
+
 - Edit version numbers in workflow files
 - Modify release note templates
 - Add additional build steps if needed
@@ -74,11 +81,13 @@ This directory contains automated workflows for the Blog App project.
 ## 📱 Output Files
 
 ### APK Files
+
 - **Location**: `build/app/outputs/flutter-apk/app-release.apk`
 - **Usage**: Direct installation on Android devices
 - **Size**: ~15-20MB optimized
 
 ### AAB Files (Manual releases only)
+
 - **Location**: `build/app/outputs/bundle/release/app-release.aab`
 - **Usage**: Upload to Google Play Store
 - **Advantages**: Smaller download size, dynamic delivery
@@ -94,6 +103,7 @@ This directory contains automated workflows for the Blog App project.
 ## 📊 Build Information
 
 Each release includes:
+
 - Build number (auto-incremented)
 - Commit SHA
 - Build timestamp
@@ -125,4 +135,4 @@ Each release includes:
 
 ---
 
-*This CI/CD setup ensures reliable, automated builds and releases for the Blog App project.*
+_This CI/CD setup ensures reliable, automated builds and releases for the Blog App project._

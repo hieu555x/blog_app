@@ -4,105 +4,105 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Release version (e.g., v1.0.0)'
+        description: "Release version (e.g., v1.0.0)"
         required: true
         type: string
       release_notes:
-        description: 'Release notes'
+        description: "Release notes"
         required: false
         type: string
-        default: 'Bug fixes and improvements'
+        default: "Bug fixes and improvements"
 
 jobs:
   create-release:
     name: Create Tagged Release
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-    
-    - name: Setup Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'zulu'
-        java-version: '17'
-    
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.24.3'
-        channel: 'stable'
-        cache: true
-    
-    - name: Get Flutter dependencies
-      run: flutter pub get
-    
-    - name: Create app_secrets.dart file
-      run: |
-        mkdir -p lib/core/secrets
-        cat > lib/core/secrets/app_secrets.dart << EOF
-        class AppSecrets {
-          static const String supabaseUrl = 'https://placeholder-url.supabase.co';
-          static const String supabaseAnnonKey = 'placeholder-anon-key';
-        }
-        EOF
-    
-    - name: Extract version number
-      id: version
-      run: |
-        VERSION=${{ github.event.inputs.version }}
-        VERSION_NUMBER=${VERSION#v}
-        echo "version_number=$VERSION_NUMBER" >> $GITHUB_OUTPUT
-        echo "tag_name=$VERSION" >> $GITHUB_OUTPUT
-    
-    - name: Build APK
-      run: flutter build apk --release --build-name=${{ steps.version.outputs.version_number }} --build-number=${{ github.run_number }}
-    
-    - name: Build AAB (for Play Store)
-      run: flutter build appbundle --release --build-name=${{ steps.version.outputs.version_number }} --build-number=${{ github.run_number }}
-    
-    - name: Create Release
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: ${{ steps.version.outputs.tag_name }}
-        name: Blog App ${{ steps.version.outputs.tag_name }}
-        body: |
-          ## 🚀 Blog App Release ${{ steps.version.outputs.tag_name }}
-          
-          ### 📱 Downloads
-          - **APK File**: app-release.apk (Android 5.0+)
-          - **AAB File**: app-release.aab (for Play Store)
-          
-          ### ✨ Release Notes
-          ${{ github.event.inputs.release_notes }}
-          
-          ### 📋 Installation Instructions
-          #### For APK:
-          1. Download the APK file below
-          2. Enable "Unknown sources" in Android settings
-          3. Install the APK file
-          4. Open the app and enjoy!
-          
-          #### For Developers:
-          - Use the AAB file for Play Store publishing
-          - Both files are signed and ready for distribution
-          
-          ### 🔧 Build Information
-          - **Version**: ${{ steps.version.outputs.version_number }}
-          - **Build Number**: ${{ github.run_number }}
-          - **Flutter Version**: 3.24.3
-          - **Build Date**: ${{ github.event.repository.updated_at }}
-          - **Commit**: ${{ github.sha }}
-          
-          ### 🛡️ Security
-          - All builds are automatically scanned for security issues
-          - APK is signed with release key
-          - No debug information included
-        files: |
-          build/app/outputs/flutter-apk/app-release.apk
-          build/app/outputs/bundle/release/app-release.aab
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.24.3"
+          channel: "stable"
+          cache: true
+
+      - name: Get Flutter dependencies
+        run: flutter pub get
+
+      - name: Create app_secrets.dart file
+        run: |
+          mkdir -p lib/core/secrets
+          cat > lib/core/secrets/app_secrets.dart << EOF
+          class AppSecrets {
+            static const String supabaseUrl = 'https://placeholder-url.supabase.co';
+            static const String supabaseAnnonKey = 'placeholder-anon-key';
+          }
+          EOF
+
+      - name: Extract version number
+        id: version
+        run: |
+          VERSION=${{ github.event.inputs.version }}
+          VERSION_NUMBER=${VERSION#v}
+          echo "version_number=$VERSION_NUMBER" >> $GITHUB_OUTPUT
+          echo "tag_name=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build APK
+        run: flutter build apk --release --build-name=${{ steps.version.outputs.version_number }} --build-number=${{ github.run_number }}
+
+      - name: Build AAB (for Play Store)
+        run: flutter build appbundle --release --build-name=${{ steps.version.outputs.version_number }} --build-number=${{ github.run_number }}
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.version.outputs.tag_name }}
+          name: Blog App ${{ steps.version.outputs.tag_name }}
+          body: |
+            ## 🚀 Blog App Release ${{ steps.version.outputs.tag_name }}
+
+            ### 📱 Downloads
+            - **APK File**: app-release.apk (Android 5.0+)
+            - **AAB File**: app-release.aab (for Play Store)
+
+            ### ✨ Release Notes
+            ${{ github.event.inputs.release_notes }}
+
+            ### 📋 Installation Instructions
+            #### For APK:
+            1. Download the APK file below
+            2. Enable "Unknown sources" in Android settings
+            3. Install the APK file
+            4. Open the app and enjoy!
+
+            #### For Developers:
+            - Use the AAB file for Play Store publishing
+            - Both files are signed and ready for distribution
+
+            ### 🔧 Build Information
+            - **Version**: ${{ steps.version.outputs.version_number }}
+            - **Build Number**: ${{ github.run_number }}
+            - **Flutter Version**: 3.24.3
+            - **Build Date**: ${{ github.event.repository.updated_at }}
+            - **Commit**: ${{ github.sha }}
+
+            ### 🛡️ Security
+            - All builds are automatically scanned for security issues
+            - APK is signed with release key
+            - No debug information included
+          files: |
+            build/app/outputs/flutter-apk/app-release.apk
+            build/app/outputs/bundle/release/app-release.aab
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
