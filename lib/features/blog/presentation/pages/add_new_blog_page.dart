@@ -113,12 +113,12 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
                                     ),
                                   )
                                 : DottedBorder(
-                                    options: RoundedRectDottedBorderOptions(
-                                      radius: const Radius.circular(12),
-                                      color: AppPalette.borderColor,
-                                      dashPattern: [12, 4],
-                                      strokeCap: StrokeCap.round,
-                                    ),
+                                    color: AppPalette.borderColor,
+                                    strokeWidth: 2,
+                                    dashPattern: const [12, 4],
+                                    strokeCap: StrokeCap.round,
+                                    borderType: BorderType.RRect,
+                                    radius: const Radius.circular(12),
                                     child: const SizedBox(
                                       height: 160,
                                       width: double.infinity,
