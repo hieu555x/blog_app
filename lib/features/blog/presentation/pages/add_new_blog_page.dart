@@ -45,14 +45,14 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
         selectorTopics.isNotEmpty &&
         image != null) {
       context.read<BlogBloc>().add(
-        BlogUpload(
-          posterId: posterId,
-          title: titleController.text.trim(),
-          content: contentController.text.trim(),
-          image: image!,
-          topics: selectorTopics,
-        ),
-      );
+            BlogUpload(
+              posterId: posterId,
+              title: titleController.text.trim(),
+              content: contentController.text.trim(),
+              image: image!,
+              topics: selectorTopics,
+            ),
+          );
     }
   }
 
