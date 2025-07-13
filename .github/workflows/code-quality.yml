@@ -2,90 +2,90 @@ name: Code Quality Check
 
 on:
   push:
-    branches: [main, develop]
+    branches: [ main, develop ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   analyze:
     name: Code Analysis
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "3.24.3"
-          channel: "stable"
-          cache: true
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Create app_secrets.dart file
-        run: |
-          mkdir -p lib/core/secrets
-          cat > lib/core/secrets/app_secrets.dart << EOF
-          class AppSecrets {
-            static const String supabaseUrl = 'https://placeholder-url.supabase.co';
-            static const String supabaseAnnonKey = 'placeholder-anon-key';
-          }
-          EOF
-
-      - name: Verify formatting
-        run: dart format --output=none --set-exit-if-changed .
-
-      - name: Analyze project source
-        run: flutter analyze --fatal-infos
-
-      - name: Run tests
-        run: flutter test --coverage
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          file: coverage/lcov.info
-          fail_ci_if_error: false
-          verbose: true
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: "3.27.1"
+        channel: "stable"
+        cache: true
+    
+    - name: Get dependencies
+      run: flutter pub get
+    
+    - name: Create app_secrets.dart file
+      run: |
+        mkdir -p lib/core/secrets
+        cat > lib/core/secrets/app_secrets.dart << EOF
+        class AppSecrets {
+          static const String supabaseUrl = 'https://placeholder-url.supabase.co';
+          static const String supabaseAnnonKey = 'placeholder-anon-key';
+        }
+        EOF
+    
+    - name: Verify formatting
+      run: dart format --output=none --set-exit-if-changed .
+    
+    - name: Analyze project source
+      run: flutter analyze --fatal-infos
+    
+    - name: Run tests
+      run: flutter test --coverage
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: coverage/lcov.info
+        fail_ci_if_error: false
+        verbose: true
 
   lint:
     name: Lint Check
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "3.24.3"
-          channel: "stable"
-          cache: true
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Create app_secrets.dart file
-        run: |
-          mkdir -p lib/core/secrets
-          cat > lib/core/secrets/app_secrets.dart << EOF
-          class AppSecrets {
-            static const String supabaseUrl = 'https://placeholder-url.supabase.co';
-            static const String supabaseAnnonKey = 'placeholder-anon-key';
-          }
-          EOF
-
-      - name: Run custom lints
-        run: |
-          echo "🔍 Checking for TODO comments..."
-          find lib/ -name "*.dart" -exec grep -l "TODO\|FIXME\|HACK" {} \; || true
-
-          echo "🔍 Checking for print statements..."
-          find lib/ -name "*.dart" -exec grep -l "print(" {} \; || true
-
-          echo "🔍 Checking for hardcoded strings..."
-          find lib/ -name "*.dart" -exec grep -l "TODO.*hardcoded" {} \; || true
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: "3.27.1"
+        channel: "stable"
+        cache: true
+    
+    - name: Get dependencies
+      run: flutter pub get
+    
+    - name: Create app_secrets.dart file
+      run: |
+        mkdir -p lib/core/secrets
+        cat > lib/core/secrets/app_secrets.dart << EOF
+        class AppSecrets {
+          static const String supabaseUrl = 'https://placeholder-url.supabase.co';
+          static const String supabaseAnnonKey = 'placeholder-anon-key';
+        }
+        EOF
+    
+    - name: Run custom lints
+      run: |
+        echo "🔍 Checking for TODO comments..."
+        find lib/ -name "*.dart" -exec grep -l "TODO\|FIXME\|HACK" {} \; || true
+        
+        echo "🔍 Checking for print statements..."
+        find lib/ -name "*.dart" -exec grep -l "print(" {} \; || true
+        
+        echo "🔍 Checking for hardcoded strings..."
+        find lib/ -name "*.dart" -exec grep -l "TODO.*hardcoded" {} \; || true

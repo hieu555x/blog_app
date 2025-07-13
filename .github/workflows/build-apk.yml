@@ -26,7 +26,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.24.3"
+          flutter-version: "3.27.1"
           channel: "stable"
           cache: true
 
@@ -85,7 +85,7 @@ jobs:
 
             ### 🔧 Build Information
             - **Build Number**: ${{ github.run_number }}
-            - **Flutter Version**: 3.24.3
+            - **Flutter Version**: 3.27.1
             - **Build Date**: ${{ github.event.head_commit.timestamp }}
             - **Commit**: ${{ github.sha }}
           draft: false
